@@ -1,4 +1,4 @@
-import whisper
+import whisper, os
 
 model_prompt_info = """Available Whisper models:
   tiny    ( 39M) | ~1GB  VRAM | ~10x speed | English: tiny.en
@@ -8,8 +8,17 @@ model_prompt_info = """Available Whisper models:
   large  (1550M) | ~10GB VRAM | ~ 1x speed | Multilingual only
   turbo   (809M) | ~6GB  VRAM | ~ 8x speed | Multilingual only
 """
-model = whisper.load_model(input(f"Choose a model, \n {model_prompt_info} >>> ").lower())
 
-if input("Do you want to view this models info? (y/n) \n >>> ").strip().lower() == "y":
-    print(model)
+# loads the selected model using the metal api (mps)
+# Warning: this does not handle typos
+# Warning: current config is macOS only
 
+model = whisper.load_model(input(f"Choose a model, \n {model_prompt_info} >>> ").lower(), device="mps")
+
+if input("Do you want to view this model's info? (y/n) \n >>> ").strip().lower() == "y":
+	print(model)
+
+path = os.path.expanduser(input("Enter FULL path to audio file: \n >>> ").strip())
+result = model.transcribe(path)
+
+print(f"\n {result["text"]}")

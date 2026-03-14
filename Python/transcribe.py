@@ -15,10 +15,14 @@ model_prompt_info = """Available Whisper models:
 
 model = whisper.load_model(input(f"Choose a model, \n {model_prompt_info} >>> ").lower(), device="mps")
 
-if input("Do you want to view this model's info? (y/n) \n >>> ").strip().lower() == "y":
-	print(model)
+def main():
+	if input("Do you want to view this model's info? (y/n) \n >>> ").strip().lower() == "y":
+		print(model)
 
-path = os.path.expanduser(input("Enter FULL path to audio file: \n >>> ").strip())
-result = model.transcribe(path)
+	path = os.path.expanduser(input("Enter FULL path to audio file: \n >>> ").strip())
+	result = model.transcribe(path)
 
-print(f"\n {result["text"]}")
+	print(f"\n {result["text"]}")
+
+if __name__ == "__main__":
+	main()
